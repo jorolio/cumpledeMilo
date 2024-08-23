@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de Cumpleaños - Milo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('img/bob\ esponja/bob2.jpg'); /* Cambia la ruta por tu imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: 20px;
+            color: rgb(77, 240, 132);
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #ffeb3b;
+        }
+        .countdown {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .photos img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px;
+            border: 2px solid #ffeb3b;
+            cursor: pointer; /* Añadimos cursor pointer para indicar que son clicables */
+        }
+        .link-location {
+            display: block;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #ffeb3b;
+            text-decoration: none;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            max-width: 80%;
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Efecto y tamaño de la letra para MILO */
+        h3 {
+            font-size: 48px;
+            color: #ff3b3b;
+            animation: blink 1s infinite;
+        }
+
+        /* Animación de parpadeo */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>¡Te invito a mi fiesta de cumpleaños!</h1>
+    <h2>Vení a festejar mi cumple número 5</h2>
+    <h3>MILO</h3>
+    <p>En el SUM del B° TAC, de 16 hs a 19 hs, el 31 de agosto de 2024</p>
+
+    <!-- Contador regresivo -->
+    <div class="countdown" id="countdown">
+        Tiempo restante: <span id="time"></span>
+    </div>
+
+    <!-- Link de ubicación -->
+    <a class="link-location" href="https://maps.app.goo.gl/nfRqSWXS1mdzWZF77" target="_blank">click para la Ubicación</a>
+
+    <!-- Fotos del cumpleañero -->
+    <div class="photos">
+        <img src="img/milo1.jpg" alt="Foto de Milo 1" class="photo">
+        <img src="img/milo2.jpg" alt="Foto de Milo 2" class="photo">
+        <img src="img/milo3.jpg" alt="Foto de Milo 3" class="photo">
+        <img src="img/bob esponja/20210301_194216.jpg" alt="foto de milo 4" class="photo">
+        <img src="img/bob esponja/20210829_115512.jpg" alt="Foto de milo 5" class="photo">
+        <img src="img/bob esponja/20211205_190158.jpg" alt="Foto de milo 6" class="photo">
+        <img src="img/bob esponja/IMG_20200824_103104.jpg" alt="Foto de milo 7" class="photo">
+        <img src="img/bob esponja/IMG_20200826_214959.jpg" alt="Foto de milo 8" class="photo">
+        <img src="img/bob esponja/IMG_20200901_124702.jpg" alt="Foto de milo 9" class="photo">
+        <img src="img/bob esponja/IMG_20201026_124022.jpg" alt="Foto de Milo 10" class="photo">
+        <img src="img/bob esponja/IMG_20201129_191438.jpg" alt="Foto de Milo 11" class="photo">
+    </div>
+
+    <!-- Apartado para agregar fotos -->
+    <div class="upload-section">
+        <h3>Carga fotos con Milo</h3>
+        <input type="file" id="fileUpload" multiple>
+        <div id="uploadedPhotos"></div>
+    </div>
+</div>
+
+<!-- Modal para agrandar la imagen -->
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="imgModal">
+</div>
+
+<script>
+// Función para el contador regresivo
+const countdown = () => {
+    const eventDate = new Date("August 31, 2024 16:00:00").getTime();
+    const now = new Date().getTime();
+    const timeDifference = eventDate - now;
+
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    document.getElementById("time").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+    if (timeDifference < 0) {
+        clearInterval(x);
+        document.getElementById("time").innerHTML = "¡La fiesta ha comenzado!";
+    }
+};
+
+// Actualiza el contador cada segundo
+const x = setInterval(countdown, 1000);
+
+// Función para mostrar fotos cargadas
+document.getElementById('fileUpload').addEventListener('change', function(event) {
+    const uploadedPhotos = document.getElementById('uploadedPhotos');
+    uploadedPhotos.innerHTML = '';
+
+    Array.from(event.target.files).forEach(file => {
+        const imgElement = document.createElement('img');
+        imgElement.src = URL.createObjectURL(file);
+        imgElement.width = 100;
+        imgElement.height = 100;
+        imgElement.style.objectFit = 'cover';
+        imgElement.style.margin = '10px';
+        imgElement.style.borderRadius = '50%';
+        uploadedPhotos.appendChild(imgElement);
+    });
+});
+
+// Modal para agrandar imágenes
+const modal = document.getElementById('myModal');
+const modalImg = document.getElementById("imgModal");
+const closeModal = document.getElementsByClassName("close")[0];
+
+document.querySelectorAll('.photo').forEach(img => {
+    img.addEventListener('click', function() {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    });
+});
+
+// Cerrar el modal
+closeModal.onclick = function() {
+    modal.style.display = "none";
+};
+
+// Cerrar modal cuando se hace clic fuera de la imagen
+modal.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
+</script>
+
+</body>
+</html>
